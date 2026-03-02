@@ -1,0 +1,71 @@
+{% load static %}
+{% load math_filters %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Purchase Lookup</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ccc;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+    </style>
+    <script src="{% static 'jquery_min.js' %}"></script>
+    <script src="{% static 'customerHistory.js' %}"></script>
+</head>
+<body>
+
+    <h2>Check Your Purchases</h2>
+
+    <form id="emailForm" action="purchase-list" method="post">
+        {% csrf_token %}
+        <label for="email">Enter Email:</label><br>
+        <input type="email" name="email" id="email" required><br>
+        <button type="submit">Submit</button>
+    </form>
+
+    {% if purchaseData %}
+    <h1>{{email}}</h1>
+    <!-- Purchase Table (Hidden Initially) -->
+    <table id="purchaseTable" class="hidden">
+        <thead>
+            <tr>
+                <th>Purchase ID</th>
+                <th>Product Name</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Purchase Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in purchaseData %}
+            {% with totalPrice=item.quantity|multiply:item.product.price_with_tax %}
+            <tr>
+                <td>{{item.id}}</td>
+                <td>{{item.product.name}}</td>
+                <td>{{item.quantity}}</td>
+                <td>{{totalPrice}}</td>
+                <td>{{ item.created_at|date:"d-m-Y H:i" }}</td>
+            </tr>
+            {% endwith %}
+            {% endfor %}
+        </tbody>
+    </table>
+{% endif %}
+<p>{{message}}</p>
+    </body>
+    </html>

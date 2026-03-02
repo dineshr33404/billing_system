@@ -1,0 +1,128 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Billing System - Page 1</title>
+    <style>
+        body { font-family: sans-serif; margin: 40px; }
+        .billing-container { max-width: 600px; margin: auto; border: 1px solid #ccc; padding: 20px; }
+        .section { margin-bottom: 20px; }
+        .row { margin-bottom: 10px; display: flex; gap: 10px; align-items: center; }
+        .separator { border-top: 1px solid #000; margin: 20px 0; }
+        label { min-width: 150px; }
+        input[type="text"], input[type="number"], input[type="email"] { padding: 5px; }
+        .denom-input { width: 80px; }
+        .actions { display: flex; justify-content: flex-end; gap: 10px; }
+    </style>
+    <script src="{% static 'jquery_min.js' %}"></script>
+    <script src="{% static 'billProceed.js' %}"></script>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="customer-history">history</a></li>
+        </ul>
+    </nav>
+
+<div class="billing-container">
+    <h2 style="text-align: center;">Billing Page</h2>
+
+    <form id="billingForm">
+        
+        <div class="section">
+            <div class="row">
+                <label for="email">Customer Email</label>
+                <input type="email" id="email" name="customer_email" placeholder="Email ID" required>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="row">
+                <strong>Bill section</strong>
+                <button type="button" id="addNewBtn">Add New</button>
+            </div>
+            
+            <div id="product-fields-container">
+                <div class="row product-row">
+                    <label>Product ID</label>
+                    <input type="text" class="product_id" placeholder="Product ID" required>
+                    <label> Quantity </label>
+                    <input type="number" class="quantity" placeholder="Quantity" min="1" value="1" required>
+                </div>
+            </div>
+        </div>
+
+        <div class="separator"></div>
+
+        <div class="section">
+            <strong>Denominations</strong>
+            <p><small>Enter count for each available value in shop [cite: 11]</small></p>
+            
+            <div class="row">
+                <label for="dinom_500">500</label> 
+                <input type="number" id="denom_500" class="denom-input" min=0 placeholder="Count" value="0">
+            </div>
+                        <div class="row">
+                <label for="dinom_100">100</label> 
+                <input type="number" id="denom_100" class="denom-input" min=0 placeholder="Count" value="0">
+            </div>
+            <div class="row">
+                <label for="dinom_50">50</label> 
+                <input type="number" id="denom_50" class="denom-input" min=0 placeholder="Count" value="0">
+            </div>
+            <div class="row">
+                <label for="dinom_20">20</label> 
+                <input type="number" id="denom_20" class="denom-input" min=0 placeholder="Count" value="0">
+            </div>
+            <div class="row">
+                <label for="dinom_10">10</label> 
+                <input type="number" id="denom_10" class="denom-input" min=0 placeholder="Count" value="0">
+            </div>
+            <div class="row">
+                <label for="dinom_5">5</label> 
+                <input type="number" id="denom_5" class="denom-input" min=0 placeholder="Count" value="0">
+            </div>
+            <div class="row">
+                <label for="dinom_2">2</label> 
+                <input type="number" id="denom_2" class="denom-input" min=0 placeholder="Count" value="0">
+            </div>
+            <div class="row">
+                <label for="dinom_1">1</label> 
+                <input type="number" id="denom_1" class="denom-input" min=0 placeholder="Count" value="0">
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="row">
+                <label for="cash_paid">Cash paid by customer</label>
+                <input type="number" step="0.01" id="cash_paid" placeholder="Amount" required>
+            </div>
+        </div>
+
+        <div class="actions">
+            <button type="reset">Cancel</button>
+            <button type="submit" id = "getData">Generate Bill</button>
+        </div>
+
+    </form>
+</div>
+
+<script>
+    // Logic to dynamically add product rows 
+    document.getElementById('addNewBtn').addEventListener('click', function() {
+        const container = document.getElementById('product-fields-container');
+        const newRow = document.createElement('div');
+        newRow.className = 'row product-row';
+        newRow.innerHTML = `
+        <label> Product ID </label>
+            <input type="text" class="product_id" placeholder="Product ID" required>
+            <label> Quantity </label>
+            <input type="number" class="quantity" placeholder="Quantity" min="1" value="1" required>
+        `;
+        container.appendChild(newRow);
+    });
+</script>
+<p id = "sample"></p>
+</body>
+</html>
