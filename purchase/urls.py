@@ -8,4 +8,5 @@ urlpatterns = [
     path('final-call', views.finalBill, name='finalBill'),
     path('customer-history', views.customerHistory, name='customerHistory'),
     path('purchase-list', views.purchaseList, name='purchaseList'),
+    path('totalAmount', views.totalAmount, name='totalAmount'),
 ]

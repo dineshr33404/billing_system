@@ -40,6 +40,8 @@ def processBill(request):
                 }, status=400)
             total_price = total_price + (product.price_with_tax * int(obj['quantity']))
             tax_total = tax_total + (product.get_tax_amount * int(obj['quantity']))
+        if total_price > int(cash):
+            return JsonResponse({"status":"error", "message":"Insufficient amount, total amount: " + str(total_price)}, status=400)
         for obj in productData:
             print("second for")
             purchase = Purchase.objects.create(email =email, total_price = total_price)
@@ -105,3 +107,33 @@ def purchaseList(request):
         return render(request, 'customerHistory.html', {"purchaseData": data, "email": email})
     except Exception as e:
         return render(request, 'customerHistory.html', {"message": str(e)})
+
+
+#total amount
+def totalAmount(request):
+    try:
+        payload = json.loads(request.body)
+        productData = payload.get('products')
+        total_price = 0
+        for obj in productData:
+            try:
+                product = Product.objects.get(product_token=obj['product_id'])
+            except Product.DoesNotExist:
+                return JsonResponse({
+                    "status": "error", "message":"Invalid product id: " + obj['product_id']
+                }, status=400)
+            if product.available_stock < int(obj['quantity']):
+            
+                return JsonResponse({
+                    "status":"error", "message":"Insufficient stock, only " + product.available_stock + " in stock"
+                }, status=400)
+            total_price = total_price + (product.price_with_tax * int(obj['quantity']))
+        return JsonResponse({
+            "status":"success", "message":"Amount: " + str(total_price)
+            }, status=200)
+    except Exception as e:
+        return JsonResponse({
+            "status":"error", "message": str(e)
+            }, status=500)
+            
+            
