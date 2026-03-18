@@ -25,15 +25,18 @@ var cash_paid = $('#cash_paid').val();
 var email = $('#email').val();
 //alert(csrftoken);
 var denomData = {
-    500: $('#denom500').val(),
-    100: $('#denom100').val(),
-    50: $('#denom50').val(),
-    20: $('#denom20').val(),
-    10: $('#denom10').val(),
-    5: $('#denom5').val(),
-    2: $('#denom2').val(),
-    1: $('#denom1').val()
+    500: $('#denom_500').val(),
+    100: $('#denom_100').val(),
+    50: $('#denom_50').val(),
+    20: $('#denom_20').val(),
+    10: $('#denom_10').val(),
+    5: $('#denom_5').val(),
+    2: $('#denom_2').val(),
+    1: $('#denom_1').val()
 };
+
+console.log(denomData);
+
 
     var data = [];
 

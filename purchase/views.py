@@ -23,6 +23,7 @@ def processBill(request):
         email = payload.get('email')
         cash = payload.get('cash_paid')
         denominationData = payload.get('denomination')
+        print(denominationData)
         total_price = 0
         tax_total = 0
         for obj in productData:
@@ -49,9 +50,9 @@ def processBill(request):
             purchase_product.objects.create(purchase = purchase, product = productValue, quantity = int(obj['quantity']))
             Product.objects.filter(product_token= obj['product_id']).update(available_stock=F('available_stock') - int(obj['quantity']))
         for key, value in denominationData.items():
-            print("key: " + key)
-            if value != 0:
-                Denomination.objects.filter(name=key).update(available_quantity = F('available_quantity') + value)
+            print("key: " + key + " value: " + str(value))
+            if int(value) != 0:
+                Denomination.objects.filter(name=key).update(available_quantity = F('available_quantity') + int(value))
         request.session['purchaseInfo'] = {
             "email": email,
             "cash": cash,
@@ -72,7 +73,7 @@ def processBill(request):
 def finalBill(request):
     purchaseInfo = request.session.get('purchaseInfo')
     data = purchase_product.objects.select_related('product').filter(purchase=purchaseInfo['purchase_id'])
-    denominationData = Denomination.objects.all()
+    denominationData = Denomination.objects.all().order_by('id')
     balanceList = []
     rounded = round(int(purchaseInfo['cash']) - purchaseInfo['total_price'])
     balance = rounded
